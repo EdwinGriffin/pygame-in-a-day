@@ -32,7 +32,9 @@ for i in range (10):
 #Sprite Groups
 hero_group = pygame.sprite.GroupSingle(hero)
 
+#Loop conditions
 finish = False
+win = False
 #Main Loop
 while finish != True:
     #Event Loop
@@ -51,12 +53,21 @@ while finish != True:
             finish = True
         if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             finish = True
+    #Check for a collision and remove the candy if there is one
     pygame.sprite.groupcollide(hero_group, candies, False, True)
-    
+    #Check if we're out of candy
+    if len(candies) == 0:
+        win = True
+
     # Paint the background black (the three values represent red, green and blue: 0 for all of them makes it black)
     screen.fill((0, 0, 0))
     candies.draw(screen)
     hero_group.draw(screen)
+    if win:
+        font = pygame.font.Font(None, 36)
+        text_image = font.render("You Win!", True, (255, 255, 255))
+        text_rect = text_image.get_rect(centerx=WIDTH/2, centery=100)
+        screen.blit(text_image, text_rect)
     pygame.display.update()
 
 pygame.quit()
